@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/AppTestReact/static/css/main.2cce8147.chunk.css",
+    "main.js": "/AppTestReact/static/js/main.dbb76712.chunk.js",
+    "main.js.map": "/AppTestReact/static/js/main.dbb76712.chunk.js.map",
+    "runtime~main.js": "/AppTestReact/static/js/runtime~main.116f218e.js",
+    "runtime~main.js.map": "/AppTestReact/static/js/runtime~main.116f218e.js.map",
+    "static/js/2.468b2f5f.chunk.js": "/AppTestReact/static/js/2.468b2f5f.chunk.js",
+    "static/js/2.468b2f5f.chunk.js.map": "/AppTestReact/static/js/2.468b2f5f.chunk.js.map",
+    "index.html": "/AppTestReact/index.html",
+    "precache-manifest.5d0be1d7d651ffda58ea21a6254a00d8.js": "/AppTestReact/precache-manifest.5d0be1d7d651ffda58ea21a6254a00d8.js",
+    "service-worker.js": "/AppTestReact/service-worker.js",
+    "static/css/main.2cce8147.chunk.css.map": "/AppTestReact/static/css/main.2cce8147.chunk.css.map",
+    "static/media/logo.svg": "/AppTestReact/static/media/logo.5d5d9eef.svg"
+  }
+}
