@@ -45,72 +45,113 @@ class Home extends Component {
         return false;
     }
 
+    wrapsAroundTop = (cellPosition) => {
+        return cellPosition + (this.props.boardWidth * (this.props.boardHeight - 1));
+    }
+
+    wrapsAroundLeft = (cellPosition) => {
+        return cellPosition + (this.props.boardWidth - 1); 
+    }
+
+    wrapsAroundRight = (cellPosition) => {
+        return cellPosition - (this.props.boardWidth - 1); 
+    }
+    
+    wrapsAroundBottom = (cellPosition) => {
+        return cellPosition - (this.props.boardWidth * (this.props.boardHeight - 1));
+    }
+
     upperLeftAlive = (cellPosition) => {
-        if(this.isLeftMost(cellPosition) || this.isUpMost(cellPosition)){
-            return 0;
+        var calculatedPosition = (cellPosition - this.props.boardWidth) - 1;
+        
+        if(this.isLeftMost(cellPosition) && this.isUpMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundLeft(this.wrapsAroundTop(cellPosition));
+        }else if(this.isLeftMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundLeft(cellPosition) - this.props.boardWidth;
+        }else if(this.isUpMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundTop(cellPosition) - 1;
         }
 
-        var calculatedPosition = (cellPosition - this.props.boardWidth) - 1;
         return this.props.board[calculatedPosition].active;
     }
 
     upperAlive = (cellPosition) => {
+        var calculatedPosition = cellPosition - this.props.boardWidth;
+        
         if(this.isUpMost(cellPosition)){
-            return 0;
+            calculatedPosition = this.wrapsAroundTop(cellPosition);
         }
 
-        var calculatedPosition = cellPosition - this.props.boardWidth;
         return this.props.board[calculatedPosition].active;
     }
 
     upperRightAlive = (cellPosition) => {
-        if(this.isUpMost(cellPosition) || this.isRightMost(cellPosition)){
-            return 0;
+        var calculatedPosition = (cellPosition - this.props.boardWidth) + 1;        
+        
+        if(this.isUpMost(cellPosition) && this.isRightMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundRight(this.wrapsAroundTop(cellPosition));
+        }else if(this.isRightMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundRight(cellPosition) - this.props.boardWidth;
+        }else if(this.isUpMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundTop(cellPosition) + 1;
         }
-        var calculatedPosition = (cellPosition - this.props.boardWidth) + 1;
+
         return this.props.board[calculatedPosition].active; 
     }
 
     leftAlive = (cellPosition) => {
-        if(this.isLeftMost(cellPosition)){
-            return 0;
-        }
         var calculatedPosition = cellPosition - 1;
+        
+        if(this.isLeftMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundLeft(cellPosition);
+        }
         return this.props.board[calculatedPosition].active;
     }
 
     rightAlive = (cellPosition) => {
-        if(this.isRightMost(cellPosition)){
-            return 0;
-        }
         var calculatedPosition = cellPosition + 1;
+        
+        if(this.isRightMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundRight(cellPosition);
+        }
         return this.props.board[calculatedPosition].active;
     }
 
     downLeftAlive = (cellPosition) => {
-        if(this.isLeftMost(cellPosition) || this.isDownMost(cellPosition)){
-            return 0;
-        }
-
         var calculatedPosition = (cellPosition + this.props.boardWidth) - 1;
+        
+        if(this.isLeftMost(cellPosition) && this.isDownMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundLeft(this.wrapsAroundBottom(cellPosition));
+        }else if(this.isLeftMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundLeft(cellPosition) + this.props.boardWidth;
+        }else if(this.isDownMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundBottom(cellPosition) - 1;
+        }      
+
         return this.props.board[calculatedPosition].active;
     }
 
     downAlive = (cellPosition) => {
+        var calculatedPosition = (cellPosition + this.props.boardWidth);
+        
         if(this.isDownMost(cellPosition)){
-            return 0;
+            calculatedPosition = this.wrapsAroundBottom(cellPosition);
         }
 
-        var calculatedPosition = (cellPosition + this.props.boardWidth);
         return this.props.board[calculatedPosition].active;
     }
 
     downRightAlive = (cellPosition) => {
-        if(this.isRightMost(cellPosition) || this.isDownMost(cellPosition)){
-            return 0;
-        }
-
         var calculatedPosition = (cellPosition + this.props.boardWidth) + 1;
+        
+        if(this.isRightMost(cellPosition) && this.isDownMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundRight(this.wrapsAroundBottom(cellPosition));
+        }else if(this.isRightMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundRight(cellPosition) + this.props.boardWidth;
+        }else if(this.isDownMost(cellPosition)){
+            calculatedPosition = this.wrapsAroundBottom(cellPosition) + 1;
+        }  
+
         return this.props.board[calculatedPosition].active;
     }
 
@@ -120,6 +161,24 @@ class Home extends Component {
         var result = this.upperLeftAlive(cellPosition) + this.upperAlive(cellPosition) + this.upperRightAlive(cellPosition) +
                      this.leftAlive(cellPosition) + this.rightAlive(cellPosition) + 
                      this.downLeftAlive(cellPosition) + this.downAlive(cellPosition) + this.downRightAlive(cellPosition);
+
+        if(cellPosition === 1){
+            console.log("upperLeftAlive:" + this.upperLeftAlive(cellPosition));
+            console.log("upperAlive:" + this.upperAlive(cellPosition));
+            console.log("upperRightAlive:" + this.upperRightAlive(cellPosition));
+
+            console.log("leftAlive:" + this.leftAlive(cellPosition));
+            console.log("rightAlive:" + this.rightAlive(cellPosition));
+
+            console.log("downLeftAlive:" + this.downLeftAlive(cellPosition));
+            console.log("downAlive:" + this.downAlive(cellPosition));
+            console.log("downRightAlive:" + this.downRightAlive(cellPosition));
+            
+            
+            console.log("Cell Position: " + cellPosition);
+            console.log(result);
+        }
+
 
         var state = 0;
         if(!isAlive && result === 3){
