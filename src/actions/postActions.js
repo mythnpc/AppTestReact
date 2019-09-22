@@ -18,3 +18,10 @@ export const updateBoard = (board) => {
         board: board
     }
 }
+
+export const cleanBoard = (board) => {
+    return {
+        type: 'CLEAN_BOARD',
+        board: board
+    }
+}
