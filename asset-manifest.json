@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/AppTestReact/static/css/main.2a9b66a8.chunk.css",
-    "main.js": "/AppTestReact/static/js/main.50f79f6c.chunk.js",
-    "main.js.map": "/AppTestReact/static/js/main.50f79f6c.chunk.js.map",
+    "main.css": "/AppTestReact/static/css/main.25693447.chunk.css",
+    "main.js": "/AppTestReact/static/js/main.92b29598.chunk.js",
+    "main.js.map": "/AppTestReact/static/js/main.92b29598.chunk.js.map",
     "runtime~main.js": "/AppTestReact/static/js/runtime~main.116f218e.js",
     "runtime~main.js.map": "/AppTestReact/static/js/runtime~main.116f218e.js.map",
     "static/js/2.34494272.chunk.js": "/AppTestReact/static/js/2.34494272.chunk.js",
     "static/js/2.34494272.chunk.js.map": "/AppTestReact/static/js/2.34494272.chunk.js.map",
     "index.html": "/AppTestReact/index.html",
-    "precache-manifest.c533fe884f4be044166e199951f4c6d0.js": "/AppTestReact/precache-manifest.c533fe884f4be044166e199951f4c6d0.js",
+    "precache-manifest.d29d420bc99bdb8e7ad072010f4a7ed9.js": "/AppTestReact/precache-manifest.d29d420bc99bdb8e7ad072010f4a7ed9.js",
     "service-worker.js": "/AppTestReact/service-worker.js",
-    "static/css/main.2a9b66a8.chunk.css.map": "/AppTestReact/static/css/main.2a9b66a8.chunk.css.map",
+    "static/css/main.25693447.chunk.css.map": "/AppTestReact/static/css/main.25693447.chunk.css.map",
     "static/media/logo.svg": "/AppTestReact/static/media/logo.5d5d9eef.svg"
   }
 }
