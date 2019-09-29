@@ -4,7 +4,8 @@ import './CustomButton.css';
 class CustomButton extends Component {
 
     getClass(){
-        return "custom-button";
+        var className = this.props.className;
+        return className ? className + " custom-button" : "custom-button";
     }
 
     render() {

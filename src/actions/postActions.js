@@ -25,3 +25,10 @@ export const cleanBoard = (board) => {
         board: board
     }
 }
+
+export const saveShape = (boardShape) => {
+    return {
+        type: 'SAVE_SHAPE',
+        boardShape: boardShape
+    }
+}

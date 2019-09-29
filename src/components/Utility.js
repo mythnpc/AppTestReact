@@ -196,8 +196,49 @@ export default function utility(_boardWidth, _boardHeight){
         return arrayOfConnectedCells;
     }
 
+    function getPosition(x,y){
+        return (y*_boardWidth) + x;
+    }
+
+    function getPositionX(cellPosition){
+        return cellPosition % _boardWidth;
+    }
+
+    
+    function getPositionY(cellPosition){
+        return Math.floor(cellPosition/_boardWidth);
+    }
+
+    function getMooreCells(cellPositionX, cellPositionY){
+        var arrayCell = [];
+        for(var y = cellPositionY - 2; y <= cellPositionY + 2; y++){
+            for(var x = cellPositionX - 2; x <= cellPositionX + 2; x++){
+                arrayCell.push(getPosition(x,y));
+            }
+        }
+        return arrayCell;
+    }
+
+    function captureCellsState(cellPositionX, cellPositionY, board){
+        var cellPositions = getMooreCells(cellPositionX, cellPositionY);
+        var arrayOfCellsState = [];
+        
+        for(var i = 0; i < cellPositions.length; i++ ){
+            var obj = {
+                id: i,
+                active: board[cellPositions[i]].active
+            }
+            arrayOfCellsState.push(obj);
+        }
+        return arrayOfCellsState;
+    }
+
     return {
         getAdjacentCells: getAdjacentCells,
-        getConnectedCells: getConnectedCells
+        getConnectedCells: getConnectedCells,
+        getMooreCells: getMooreCells,
+        getPositionX: getPositionX,
+        getPositionY: getPositionY,
+        captureCellsState: captureCellsState
     }
 };

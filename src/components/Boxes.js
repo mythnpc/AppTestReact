@@ -4,16 +4,17 @@ import styled from 'styled-components';
 
 class Boxes extends Component {
     getColor = () => {
-
         return this.props.active === 1 ? "black" : "white";
     }
 
     render() {
         const boxStyle = {
             backgroundColor: this.getColor(),
-            height: "20px",
-            width: "20px",
-            outline: "1px solid lightblue" 
+            minHeight: this.props.minHeight ? this.props.minHeight :"20px",
+            minWidth: this.props.minWidth ? this.props.minWidth : "20px",
+            outline: "1px solid lightblue" ,
+            display: "inherit",
+            
         }
 
 
@@ -35,14 +36,10 @@ class Boxes extends Component {
             background-color: red;
             width: 100%;
             height: 100%;
-            animation: ${rotate} 0.5s linear;
         `;
       
-
-
-
         return (
-            <div style={boxStyle} onMouseOver={this.props.onMouseOver} onClick={this.props.onClick}>
+            <div style={boxStyle} onMouseEnter={this.props.onMouseEnter} onClick={this.props.onClick}>
                 {this.props.isMarked ? <Overlay/> : ''}
             </div>
         )

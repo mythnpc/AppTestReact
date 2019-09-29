@@ -1,17 +1,32 @@
 const initState = {
     posts: [{id:'1', title: 'F', body: 'Hello', name: 'Josh'}],
-    board: generateBoard(10, 10),
-    boardWidth: 10,
-    boardHeight: 10
+    board: generateBoard(20,20),
+    savedShapes: [],
+    boardWidth: 20,
+    boardHeight:20
 }
 
 function generateBoard(x, y){
     var array = [];
     
-    for (var i = 1; i <= x*y; i++) {
+    for (var i = 0; i < x*y; i++) {
         var obj = {
             id: i,
             active: Math.round(Math.random())
+        } 
+        array.push(obj);
+    }
+
+    return array;
+}
+
+function cleanBoard(x, y){
+    var array = [];
+    
+    for (var i = 0; i < x*y; i++) {
+        var obj = {
+            id: i,
+            active: 0
         } 
         array.push(obj);
     }
@@ -48,6 +63,20 @@ const rootReducer = (state = initState, action) => {
         return {
             ...state,
             board: action.board
+        }
+    }
+
+    if(action.type === 'CLEAN_BOARD'){
+        return {
+            ...state,
+            board: cleanBoard(state.boardWidth, state.boardHeight)
+        }
+    }
+
+    if(action.type === 'SAVE_SHAPE'){
+        return {
+            ...state,
+            savedShapes: [...state.savedShapes, action.boardShape]
         }
     }
     return state;

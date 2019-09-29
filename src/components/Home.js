@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deletePost, toggleBox, updateBoard, cleanBoard } from '../actions/postActions';
+import { deletePost, toggleBox, updateBoard, cleanBoard, saveShape } from '../actions/postActions';
 import Boxes from '../components/Boxes.js';
 import CustomButton from '../components/CustomButton.js';
 import utility from './Utility.js'
-
+import ShapeGeneratorContainer from '../components/ShapeGenerator/ShapeGeneratorContainer.js'
 class Home extends Component {
 
     constructor(props) {
@@ -62,7 +62,6 @@ class Home extends Component {
     updateBoardStateInterval = () => {
         if(this.state.intervalId === 0){
             var intervalId = setInterval(() => this.updateBoardState(), 200);
-            console.log(intervalId);
             this.setState({intervalId: intervalId});
         }else {
             clearInterval(this.state.intervalId);
@@ -75,7 +74,7 @@ class Home extends Component {
         var newBoard = [];
         for(let i = 0; i < temp.length; i++){
             var obj = {
-                id: i+1,
+                id: i,
                 active: this.calculateCellResult(i)
             }
             newBoard.push(obj);
@@ -85,18 +84,19 @@ class Home extends Component {
     }
 
     isMarked = (id) => {
-      if(this.state.marked.findIndex(x => x === (id-1)) >= 0){
+      if(this.state.marked.findIndex(x => x === (id)) >= 0){
           return true;
       }
     }
 
     setMarked = (cellId) => {
         var util = utility(this.props.boardWidth, this.props.boardHeight);        
-        if(this.props.board[cellId-1].active){
-            this.setState({marked: util.getConnectedCells(cellId - 1, this.props.board)});
-        }else {
-            this.setState({marked: []});
-        }
+        this.setState({marked: util.getMooreCells(util.getPositionX(cellId), util.getPositionY(cellId))});
+    }
+
+    saveShape = (cellId) => {
+        var util = utility(this.props.boardWidth, this.props.boardHeight);        
+        this.props.saveShape(util.captureCellsState(util.getPositionX(cellId), util.getPositionY(cellId), this.props.board));
     }
 
     render() {
@@ -104,26 +104,28 @@ class Home extends Component {
         const widthSize = this.state.widthSize;
         const bodyStyle = {
             display: "grid",
-            gridTemplateColumns : `repeat(${this.props.boardWidth}, ${this.state.widthSize})`
+            gridTemplateColumns : `repeat(${this.props.boardWidth}, ${this.state.widthSize})`,
+            justifyContent: `center`
         }
         
-        const body = <div style={bodyStyle}>
+        const body = <div style={{display: "grid", gridTemplateColumns : `repeat(${this.props.boardWidth}, ${this.state.widthSize})`, justifyContent: `center`, margin:"10px"}}>
                         {this.props.board.map(x => <Boxes id={x.id} 
                                                           active={x.active} 
                                                           isMarked={this.isMarked(x.id)} 
-                                                          /* onClick={() => this.setMarked(x.id)}  */
-                                                          onClick={() => {this.state.clickState ? this.props.toggleBox(x.id): this.setMarked(x.id)}}
+                                                          onMouseEnter={() => {this.setMarked(x.id)}}
+                                                          onClick={() => {this.state.clickState ? this.props.toggleBox(x.id): this.saveShape(x.id)}}
                                                           />)}
                     </div>
 
-        const buttonContainer = <div style={{display:"flex", justifyContent:"space-between", margin:"10px"}}>
-                                    <CustomButton onClick={this.updateBoardStateInterval} message="Update"/>
+        const buttonContainer = <div style={{display:"flex", justifyContent:"space-between"}}>
                                     <CustomButton onClick={this.toggleClickState} message={this.state.clickState ? "Activate" : "Adjacent"}/>
+                                    <CustomButton onClick={this.updateBoardStateInterval} message="Update" className={this.state.intervalId != 0 ? "on": "off"}/>
                                     <CustomButton onClick={this.cleanBoard} message="Clear"/>
                                 </div>               
 
         return (
-            <div className="container">
+            <div style={{width: "80%", margin:"20px"}}>
+                <ShapeGeneratorContainer savedShapes={this.props.savedShapes}></ShapeGeneratorContainer>
                 {body}
                 {buttonContainer}
             </div>
@@ -137,7 +139,8 @@ const mapStateToProps = (state, ownProps) => {
         post: state.posts.find(post => post.id === id),
         board: state.board,
         boardWidth: state.boardWidth,
-        boardHeight: state.boardHeight
+        boardHeight: state.boardHeight,
+        savedShapes: state.savedShapes
     } 
 }
 
@@ -146,8 +149,8 @@ const mapDispatchToProps = (dispatch) => {
         deletePost: (id) => { dispatch(deletePost(id))},
         toggleBox: (id) => { dispatch(toggleBox(id))},
         updateBoard: (board) => { dispatch(updateBoard(board))},
-        cleanBoard: (board) => { dispatch(cleanBoard())}
-
+        cleanBoard: (board) => { dispatch(cleanBoard())},
+        saveShape: (boardShape) => { dispatch(saveShape(boardShape))}
     }
 }
 

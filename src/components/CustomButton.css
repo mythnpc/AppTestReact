@@ -13,6 +13,18 @@
     transition: background 0s;
 }
 
+.on{
+    background-color: rgb(143, 231, 143);
+}
+
+.on:hover, .on:active{
+    background-color: rgb(198, 219, 198);
+}
+
+.off{
+    background-color: #2196f3;
+}
+
 button{
     border: none;
     border-radius: 2px;
