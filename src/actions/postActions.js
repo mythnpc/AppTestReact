@@ -32,3 +32,17 @@ export const saveShape = (boardShape) => {
         boardShape: boardShape
     }
 }
+
+export const selectShape = (shapeId) => {
+    return {
+        type: 'SELECT_SHAPE',
+        shapeId: shapeId
+    }
+}
+
+export const applySelectedShape = (boardState) => {
+    return {
+        type: 'APPLY_SELECTED_SHAPE',
+        boardState: boardState
+    }
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deletePost, toggleBox, updateBoard, cleanBoard, saveShape } from '../actions/postActions';
+import { deletePost, toggleBox, updateBoard, cleanBoard, saveShape, applySelectedShape } from '../actions/postActions';
 import Boxes from '../components/Boxes.js';
 import CustomButton from '../components/CustomButton.js';
 import utility from './Utility.js'
@@ -13,13 +13,13 @@ class Home extends Component {
             widthSize: "20px",
             marked: [],
             intervalId: 0,
-            clickState: true
+            clickState: 0,
+            clickStates: ["Point", "Shape", "Capture"]
         };
     }
 
     toggleClickState = () => {
-        var temp = this.state.clickState;
-        this.setState({clickState: !temp, marked:[] });   
+        this.setState({clickState: (this.state.clickState + 1)%3, marked:[] });   
      }
 
      cleanBoard = () => {
@@ -95,8 +95,36 @@ class Home extends Component {
     }
 
     saveShape = (cellId) => {
-        var util = utility(this.props.boardWidth, this.props.boardHeight);        
+        var util = utility(this.props.boardWidth, this.props.boardHeight);   
         this.props.saveShape(util.captureCellsState(util.getPositionX(cellId), util.getPositionY(cellId), this.props.board));
+    }
+
+    onBoxClick = (cellId) => {
+
+        if(this.state.clickStates[this.state.clickState] === "Point"){
+            this.props.toggleBox(cellId);
+        }
+
+        if(this.state.clickStates[this.state.clickState] === "Shape"){
+            var util = utility(this.props.boardWidth, this.props.boardHeight);   
+            
+            var selectedShapeBoardState = this.props.savedShapes[this.props.selectedShapeId].boardShape;
+
+            //Gets all affected cell location, eg : 21 22 23 24 25 and replace the value with the savedShape's corresponding 0 1 2 3 4
+            var arrayOfAffectedCells = util.getMooreCells(util.getPositionX(cellId), util.getPositionY(cellId), this.props.board);
+
+            for(var i =0; i < arrayOfAffectedCells.length; i++){
+                var cellId = arrayOfAffectedCells[i];
+                var activeState = selectedShapeBoardState[i].active;
+                this.props.board[cellId].active = activeState;
+            }
+
+            this.props.applySelectedShape(this.props.board);
+        }
+
+        if(this.state.clickStates[this.state.clickState] === "Capture"){
+            this.saveShape(cellId)
+        }
     }
 
     render() {
@@ -113,12 +141,12 @@ class Home extends Component {
                                                           active={x.active} 
                                                           isMarked={this.isMarked(x.id)} 
                                                           onMouseEnter={() => {this.setMarked(x.id)}}
-                                                          onClick={() => {this.state.clickState ? this.props.toggleBox(x.id): this.saveShape(x.id)}}
+                                                          onClick={() => {this.onBoxClick(x.id)}}
                                                           />)}
                     </div>
 
         const buttonContainer = <div style={{display:"flex", justifyContent:"space-between"}}>
-                                    <CustomButton onClick={this.toggleClickState} message={this.state.clickState ? "Activate" : "Adjacent"}/>
+                                    <CustomButton onClick={this.toggleClickState} message={this.state.clickStates[this.state.clickState]}/>
                                     <CustomButton onClick={this.updateBoardStateInterval} message="Update" className={this.state.intervalId != 0 ? "on": "off"}/>
                                     <CustomButton onClick={this.cleanBoard} message="Clear"/>
                                 </div>               
@@ -140,7 +168,8 @@ const mapStateToProps = (state, ownProps) => {
         board: state.board,
         boardWidth: state.boardWidth,
         boardHeight: state.boardHeight,
-        savedShapes: state.savedShapes
+        savedShapes: state.savedShapes,
+        selectedShapeId: state.selectedShapeId
     } 
 }
 
@@ -150,7 +179,8 @@ const mapDispatchToProps = (dispatch) => {
         toggleBox: (id) => { dispatch(toggleBox(id))},
         updateBoard: (board) => { dispatch(updateBoard(board))},
         cleanBoard: (board) => { dispatch(cleanBoard())},
-        saveShape: (boardShape) => { dispatch(saveShape(boardShape))}
+        saveShape: (boardShape) => { dispatch(saveShape(boardShape))},
+        applySelectedShape: (boardState) => {dispatch(applySelectedShape(boardState))}
     }
 }
 

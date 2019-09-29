@@ -3,7 +3,8 @@ const initState = {
     board: generateBoard(20,20),
     savedShapes: [],
     boardWidth: 20,
-    boardHeight:20
+    boardHeight:20,
+    selectedShapeId: null
 }
 
 function generateBoard(x, y){
@@ -34,6 +35,10 @@ function cleanBoard(x, y){
     return array;
 }
 
+
+
+
+
 const rootReducer = (state = initState, action) => {
     if(action.type === 'DELETE_POST'){
         let newPosts = state.posts.filter(post => {
@@ -50,7 +55,6 @@ const rootReducer = (state = initState, action) => {
             if(item.id === action.id){
                 item.active = (item.active === 0) ? 1 : 0;
             }        
-            // Leave every other item unchanged
             return item;
           });
         return {
@@ -74,9 +78,29 @@ const rootReducer = (state = initState, action) => {
     }
 
     if(action.type === 'SAVE_SHAPE'){
+        var temp = {
+            id: state.savedShapes.length,
+            boardShape: action.boardShape
+        }
         return {
             ...state,
-            savedShapes: [...state.savedShapes, action.boardShape]
+            savedShapes: [...state.savedShapes, temp]
+        }
+    }
+
+    if(action.type === 'SELECT_SHAPE'){
+        return {
+            ...state,
+            selectedShapeId: action.shapeId
+        }
+    }
+
+    if(action.type === 'APPLY_SELECTED_SHAPE'){
+        var temp = [...action.boardState];
+        temp[0].active = 1;
+        return {
+            ...state,
+            board: temp
         }
     }
     return state;

@@ -11,7 +11,7 @@ class ShapeGeneratorItem extends Component {
                         {this.props.boardShape.map(x => <Boxes id={x.id} active={x.active} minWidth="10px" minHeight="10px"/>)}
                     </div>
         return (
-            <div class="shape-generator-item-wrapper">{body}</div>
+            <div onClick={this.props.onClick} class="shape-generator-item-wrapper">{body}</div>
         )
       }
 }
